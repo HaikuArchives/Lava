@@ -1,0 +1,23 @@
+Lava.cpp
+
+
+LavaApp class
+	- ...
+
+LavaProjectWindow class
+	- min/max Windowsize
+	- reziseable Window
+	- added Haikus LayoutLib
+	- ...
+
+LavaBurnStatusWindow class
+
+
+LavaBurnStatusView class
+
+
+
+LavaWaitWindow LavaWaitWindowView class
+
+
+

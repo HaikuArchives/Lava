@@ -1,0 +1,15 @@
+03.03.2010
+
+gcc4 hacht beim Linken des Addon errors und
+bei BurnDevice errors bei compilieren!
+
+Zur Zeit gcc2 möglich.
+
+Problem in:
+Lava/src/Add-On/Exceptions/Exception.h
+
+behoben.
+
+#include <map.h> -> #include <map>
+
+map<BString, void*> Data; -> std::map<BString, void*> Data;

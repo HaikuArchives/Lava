@@ -1,0 +1,12 @@
+1.) lava folder in install dir ablegen
+	install dir = /boot/.../Haiku/trunk/src/add-ons/tracker/
+	
+2.) Jamfile im folder /boot/.../Haiku/trunk/src/add-ons/tracker/  
+	anpassen um folgede zeile:
+		SubInclude HAIKU_TOP src add-ons tracker lava ;
+
+3.) in install dir eine shell öffnen und:
+		jam clean && jam 
+	ausführen
+	
+stargater

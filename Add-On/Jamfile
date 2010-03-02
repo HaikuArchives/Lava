@@ -1,0 +1,45 @@
+SubDir HAIKU_TOP src add-ons tracker lava ;
+
+local sourceDirs =
+	settings
+	Exceptions
+	column
+	#BurnDevice
+;
+
+local sourceDir ;
+for sourceDir in $(sourceDirs) {
+	SEARCH_SOURCE += [ FDirName $(HAIKU_TOP) src add-ons tracker lava $(sourceDir) ] ;
+}
+
+Application Lava-L : 
+	Lava.cpp 
+	LavaApp.cpp 
+	LavaWaitWindow.cpp 
+	LavaWaitAnimationBox.cpp
+	LavaProjectWindow.cpp 
+	LavaBurnStatusWindow.cpp 
+	LavaBurnStatusView.cpp 
+	FileAccess.cpp 
+	ProjectTypeSelector.cpp
+	LavaProjectManager.cpp
+	LavaProject.cpp 
+	FileTree.cpp
+	LavaFilePanel.cpp
+	iosettings.cpp
+	LavaSettings.cpp
+	Exception.cpp 
+	Logging.cpp 
+	IOSettingsException.cpp 
+	LavaMainException.cpp
+	ProjectManagerException.cpp
+	ProjectTypeSelectorException.cpp
+	LoggingException.cpp
+	ColorTools.cpp
+	ColumnListView.cpp
+	ColumnTypes.cpp
+	#BurnDevice.cpp
+	
+	: be tracker root media translation
+	: Lava.rdef
+;
