@@ -1,15 +1,13 @@
 03.03.2010
+Ralf Schülke aka stargater
 
-gcc4 hacht beim Linken des Addon errors und
-bei BurnDevice errors bei compilieren!
+BUGS:
+Add-on: gcc4 not linket, cam with errors
+LibBurnDevice: have errors when compile witj gcc4!
 
-Zur Zeit gcc2 mÃ¶glich.
+!!! In time gcc2 is working !!!
 
-Problem in:
-Lava/src/Add-On/Exceptions/Exception.h
-
-behoben.
-
-#include <map.h> -> #include <map>
-
-map<BString, void*> Data; -> std::map<BString, void*> Data;
+Fixed Problems:
+- Lava/src/Add-On/Exceptions/Exception.h
+	#include <map.h> to #include <map>
+	map<BString, void*> Data; to std::map<BString, void*> Data;
