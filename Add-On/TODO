@@ -1,23 +1,16 @@
-Lava.cpp
-
-
-LavaApp class
-	- ...
 
 LavaProjectWindow class
 	- min/max Windowsize
 	- reziseable Window
-	- added Haikus LayoutLib
+	- added Haiku LayoutLib
+	- added Haiku LocalKit
 	- ...
 
-LavaBurnStatusWindow class
+Add HVIF and remove BBitmap
 
+Add LibBurnDevice when it is finish!
 
-LavaBurnStatusView class
-
-
-
-LavaWaitWindow LavaWaitWindowView class
+Add BMessage File and remove the Project Folder
 
 
 

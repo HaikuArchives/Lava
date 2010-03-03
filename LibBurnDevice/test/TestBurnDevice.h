@@ -18,7 +18,7 @@
 #include <StringView.h>
 #include <Window.h>
 
-#include "BurnDevice.h"
+#include "../BurnDevice.h"
 
 const uint32 CHECKBUTTON = 'TBcb'; 
 const uint32 DEVICELIST = 'TBdl'; 
