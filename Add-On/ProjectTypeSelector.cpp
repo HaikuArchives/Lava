@@ -1,3 +1,11 @@
+/*
+ * Copyright 2007 Team MAUI All rights reserved.
+ * Distributed under the terms of the MIT License.
+ *
+ * Authors:
+ *		Robert Stiehler, Negr0@team-maui.org
+*/
+
 #include "ProjectTypeSelector.h"
 
 ProjectTypeSelector::ProjectTypeSelector()
@@ -11,6 +19,7 @@ ProjectTypeSelector::ProjectTypeSelector()
 ProjectTypeSelector::~ProjectTypeSelector()
 {
 }
+
 
 void
 ProjectTypeSelector::setFileAccess(FileAccess *objFileAccess)
@@ -85,7 +94,7 @@ ProjectTypeSelector::isImage()
 {
 	BString *FileType = (BString*)TypeList->FirstItem();
 
-	if(FileType->Compare("application/octet-stream") == 0 || 
+	if(FileType->Compare("application/octet-stream") == 0 ||
 		FileType->Compare("application/x-cd-image") == 0)
 		return true;
 	

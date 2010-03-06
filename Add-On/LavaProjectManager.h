@@ -31,6 +31,8 @@ class LavaProjectManager
 		LavaProject* AddToPorject(FileTree *FileStructure, int DiscType);
 		LavaProject* AddToPorject(FileTree *FileStructure);
 		void setStateContainer(BString *StateCont);
+		BString getActProjectPath();
+		void createProjectFromAbstractProject(BString Path);
 			
 	private:
 		BString strPathToProject;
@@ -41,9 +43,7 @@ class LavaProjectManager
 		BNode *fNode;
 		char buffer[500];
 		char buffer2[500];
-		void _writeToPorject(FileTree *FileStructure);
-		void _writeToPorject(BList *nodes, BString *innerProject);
-		void _readPorject(BString *Path);
+		
 		BString *fFileName;
 		BString *fPathAndFile;
 		BString fAlertTMP;
@@ -53,6 +53,11 @@ class LavaProjectManager
 		BPath *objTempPath;
 		BString *fStateContainer;
 		int fProjectDiscType;
+		
+		void _writeToPorject(FileTree *FileStructure);
+		void _writeToPorject(BList *nodes, BString *innerProject);
+		void _readPorject(BString *Path);
+		void _writeProjectFromAbstractProject();
 };
 
 #endif

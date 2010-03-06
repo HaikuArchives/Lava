@@ -21,8 +21,7 @@
 
 #include "Exceptions/LoggingException.h"
 
-class Logging
-{
+class Logging {
 	public:
 		Logging();
 		~Logging();

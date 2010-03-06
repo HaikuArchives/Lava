@@ -22,28 +22,25 @@
 
 /*TODO: Here need more to work, set Label from the FileItems read the BurnStatusValue from BurnDevice in the BurnProgress etc. */
 
-BurnStatusWindow::BurnStatusWindow(BRect frame,int WindowType, BMessage *msg):BWindow(frame, "Lava", B_TITLED_WINDOW, B_NOT_CLOSABLE | B_NOT_RESIZABLE | B_NOT_ZOOMABLE, 0)
+BurnStatusWindow::BurnStatusWindow(BRect frame, int WindowType, BMessage *msg)
+: BWindow(frame, "Lava", B_TITLED_WINDOW, B_NOT_CLOSABLE | B_NOT_RESIZABLE | B_NOT_ZOOMABLE, 0)
 {
-	
-	
-	float kX = frame.Width()-frame.Width();
-	float kY = frame.Height()-frame.Height();
+	float kX = frame.Width() - frame.Width();
+	float kY = frame.Height() - frame.Height();
 	float kW = frame.Width();
 	float kH = frame.Height();	
-	frame.Set(kX,kY,kW,kH);
+	frame.Set(kX, kY, kW, kH);
 	
 	FileAccess objFileAccess;
 	
-	switch (WindowType)
-	{
-		case 0:
-		{	// StatusBurnWindow
+	switch (WindowType) {
+		case 0: {
+			// StatusBurnWindow
 			fView = new BurnStatusView(frame, WindowType);
 			//fView->SetDrawingMode(B_OP_ALPHA);
 			
 			//Selectec Files, initalisiert in Lava.cpp	
-			for (int refs=0; msg->FindRef("refs", refs, &fFile_ref) == B_NO_ERROR; refs++)
-			{
+			for(int refs = 0; msg->FindRef("refs", refs, &fFile_ref) == B_NO_ERROR; refs++) {
 				fEntry.SetTo(&fFile_ref); 
 				fEntry.GetPath(&fPath);
 				fEntry.GetName(fName);
@@ -51,18 +48,14 @@ BurnStatusWindow::BurnStatusWindow(BRect frame,int WindowType, BMessage *msg):BW
 				//SetLabel
 				fView->fStatusBarBurn->SetText(fName);
 				fView->fStatusBarBurn->SetTrailingText("0%/100%");
-				
 			}
-			
 			
 			Lock();
 			AddChild(fView);
 			Unlock();
 			break;
 		}
-		case 1:
-		{	// 
-		
+		case 1: {
 		}	
 	}	
 }
@@ -76,26 +69,22 @@ BurnStatusWindow::QuitRequested()
 {
 	be_app->PostMessage(B_QUIT_REQUESTED);	
 	return true;
-	
 }
 
 void
 BurnStatusWindow::MessageReceived(BMessage* msg)
 {
-	switch (msg->what)
-	{	
-		
-		case kStopButton:
-		{
+	switch (msg->what) {	
+		case kStopButton: {
 			//BAlert* TestAlert = new BAlert("","xxx","EXIT");
 			//TestAlert->Go();
 			QuitRequested();
 			break;		
 		}
-		
-		default:
+		default: {
 			BWindow::MessageReceived(msg);
 			break;
+		}
 	};
 };
 

@@ -3,8 +3,8 @@
 
 #include "LavaWaitAnimationBox.h"
 
-AnimationBox::AnimationBox (BRect a_rect, const char * a_name, uint32 a_resizing_mode, uint32 a_flags)
-				:BBox(a_rect, a_name, a_resizing_mode, a_flags),m_barberpole_bitmap	(NULL)
+AnimationBox::AnimationBox(BRect a_rect, const char * a_name, uint32 a_resizing_mode, uint32 a_flags)
+: BBox(a_rect, a_name, a_resizing_mode, a_flags), m_barberpole_bitmap(NULL)
 {
 	m_pattern.data[0] = 0x0f;
 	m_pattern.data[1] = 0x1e;
@@ -16,13 +16,11 @@ AnimationBox::AnimationBox (BRect a_rect, const char * a_name, uint32 a_resizing
 	m_pattern.data[7] = 0x87;
 	
 	CreateBitmap();
-
-};
+}
 
 AnimationBox::~AnimationBox()
 {
 	// subviews are deleted by superclass
-	
 	delete m_barberpole_bitmap;
 }
 
@@ -40,15 +38,12 @@ AnimationBox::Pulse()
 {
 	uchar tmp = m_pattern.data[7];
 	
-	for (int j = 7;  j > 0;  --j)
-	{ 
-		m_pattern.data[j]  =  m_pattern.data[j-1];
+	for(int j = 7; j > 0; --j) { 
+		m_pattern.data[j] = m_pattern.data[j - 1];
 	}
 	
 	m_pattern.data[0] = tmp;
-	
 	DrawIntoBitmap();
-
 	Invalidate();
 }
 
@@ -60,23 +55,22 @@ AnimationBox::Draw(BRect a_rect)
 	DrawBitmap(m_barberpole_bitmap);
 }
 
-void AnimationBox::DrawIntoBitmap (void)
+void AnimationBox::DrawIntoBitmap(void)
 {
-	if (m_barberpole_bitmap->Lock())
-	{
-		BRect a_rect  =  m_barberpole_bitmap->Bounds();
-
+	if (m_barberpole_bitmap->Lock()) {
+		BRect a_rect = m_barberpole_bitmap->Bounds();
+		
 		m_barberpole_bitmap_view->SetDrawingMode(B_OP_COPY);
-	
+		
 		rgb_color  color;
 		color.red    =  0;
 		color.green  =  0;
 		color.blue   =  200;
 		color.alpha  =  255;
 		m_barberpole_bitmap_view->SetHighColor(color);
-
+		
 		// draw the pole
-		a_rect.InsetBy(2,2);
+		a_rect.InsetBy(2, 2);
 		m_barberpole_bitmap_view->FillRect(a_rect, m_pattern);	
 		
 		// draw frame
@@ -138,20 +132,20 @@ void AnimationBox::DrawIntoBitmap (void)
 		m_barberpole_bitmap_view->SetDrawingMode(B_OP_SUBTRACT);
 		m_barberpole_bitmap_view->StrokeRect(a_rect);
 	
-		a_rect.InsetBy(1,1);
-		LightenBitmapHighColor(& color);
+		a_rect.InsetBy(1, 1);
+		LightenBitmapHighColor(&color);
 		m_barberpole_bitmap_view->StrokeRect(a_rect);
 		
-		a_rect.InsetBy(1,1);
-		LightenBitmapHighColor(& color);
+		a_rect.InsetBy(1, 1);
+		LightenBitmapHighColor(&color);
 		m_barberpole_bitmap_view->StrokeRect(a_rect);
 		
-		a_rect.InsetBy(1,1);
-		LightenBitmapHighColor(& color);
+		a_rect.InsetBy(1, 1);
+		LightenBitmapHighColor(&color);
 		m_barberpole_bitmap_view->StrokeRect(a_rect);
 		
-		a_rect.InsetBy(1,1);
-		LightenBitmapHighColor(& color);
+		a_rect.InsetBy(1, 1);
+		LightenBitmapHighColor(&color);
 		m_barberpole_bitmap_view->StrokeRect(a_rect);
 		
 		m_barberpole_bitmap_view->Flush();
@@ -160,13 +154,13 @@ void AnimationBox::DrawIntoBitmap (void)
 	m_barberpole_bitmap->Unlock();
 }
 
-void AnimationBox::LightenBitmapHighColor (rgb_color * a_color)
+void AnimationBox::LightenBitmapHighColor (rgb_color *a_color)
 {
 	a_color->red    -=  30;
 	a_color->green  -=  30;
 	a_color->blue   -=  30;
 	
-	m_barberpole_bitmap_view->SetHighColor(* a_color);
+	m_barberpole_bitmap_view->SetHighColor(*a_color);
 }
 
 void AnimationBox::CreateBitmap (void)

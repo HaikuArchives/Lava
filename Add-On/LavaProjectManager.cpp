@@ -1,3 +1,12 @@
+/*
+ * Copyright 2007 Team MAUI All rights reserved.
+ * Distributed under the terms of the MIT License.
+ *
+ * Authors:
+ *		Robert Stiehler, Negr0@team-maui.org
+*/
+
+//#include <dirent.h>
 #include "LavaProjectManager.h"
 
 LavaProjectManager::LavaProjectManager()
@@ -18,6 +27,16 @@ void
 LavaProjectManager::setStateContainer(BString *StateCont)
 {
 	fStateContainer = StateCont;
+}
+
+
+BString
+LavaProjectManager::getActProjectPath()
+{
+	BString tmp = "";
+	tmp += strPathToProject;
+	tmp += fActProject;
+	return tmp;
 }
 
 
@@ -144,7 +163,7 @@ LavaProjectManager::OpenPorject()
 	memset(buffer, 0, sizeof(buffer));
 	if(fNode->ReadAttr("LAVA:Type", B_STRING_TYPE, 0, buffer, sizeof(buffer)) == B_ENTRY_NOT_FOUND)
 		throw new ProjectManagerException(new BString("Not a project, subproject folder or project is damaged (LavaProjectManager::OpenPorject)"), fObjLavaFilePanel, fNode);
-
+	
 	if(fNode->ReadAttr("LAVA:DiscType", B_INT32_TYPE, 0, &DiscType, sizeof(DiscType)) == B_ENTRY_NOT_FOUND)
 		throw new ProjectManagerException(new BString("can't read disc type of project (LavaProjectManager::OpenPorject)"), fObjLavaFilePanel, fNode);
 	
@@ -170,14 +189,13 @@ LavaProjectManager::OpenPorject()
 void
 LavaProjectManager::_readPorject(BString *Path)
 {
-	//DIR *dir = new DIR;
-	DIR *dir;
+	DIR *dir; // = new DIR;
 	struct dirent *dirzeiger = new dirent;
 	int64 tmpSize = 0;
 	bool Query = false;
 	objTempPath = new BPath();
 		
-	if((dir = opendir(Path->String())) != NULL) {
+	if((dir =opendir(Path->String())) != NULL) {
 		while((dirzeiger=readdir(dir)) != NULL) {
 			if(strcmp((*dirzeiger).d_name, ".") != 0 && strcmp((*dirzeiger).d_name, "..") != 0) {					
 				fFileName->SetTo((*dirzeiger).d_name);
@@ -217,10 +235,10 @@ LavaProjectManager::_readPorject(BString *Path)
 						if(fNode->ReadAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, buffer2, sizeof(buffer2)) == B_ENTRY_NOT_FOUND)
 							throw new ProjectManagerException(new BString("an Attr. PathToFolder doesn't exsist by some file (LavaProjectManager::_readPorject)"), fObjDir, fNode);
 						
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new off_t(tmpSize), true);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new int64 = tmpSize, true);
 					}
 					else {
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new off_t(tmpSize), false);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new int64 = tmpSize, false);
 					}
 				}
 				else if(fObjDir->InitCheck() == B_OK) { //Folder
@@ -249,10 +267,10 @@ LavaProjectManager::_readPorject(BString *Path)
 						if(fNode->ReadAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, buffer2, sizeof(buffer2)) == B_ENTRY_NOT_FOUND)
 							throw new ProjectManagerException(new BString("an Attr. PathToFolder doesn't exsist by some file (LavaProjectManager::_readPorject)"), fObjDir, fNode);
 						
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new off_t(tmpSize), true);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new int64 = tmpSize, true);
 					}
 					else {
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, false, new off_t(tmpSize), false);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, false, new int64 = tmpSize, false);
 					}
 					
 					_readPorject(new BString(fPathAndFile->String()));
@@ -277,6 +295,7 @@ LavaProjectManager::AddToPorject(FileTree *FileStructure, int DiscType)
 	fProjectDiscType = DiscType;
 	return AddToPorject(FileStructure);
 }
+
 
 /*	AddToPorject
 *	Add files to an new created project
@@ -353,7 +372,6 @@ LavaProjectManager::_writeToPorject(FileTree *FileStructure)
 /*	AddToPorject
 *	write internal file structure (FileTree) to hard drive
 */
-
 void
 LavaProjectManager::_writeToPorject(BList *nodes, BString *innerProject)
 {
@@ -368,8 +386,8 @@ LavaProjectManager::_writeToPorject(BList *nodes, BString *innerProject)
 		tmpTree = (FileTree*)nodes->ItemAt(i);
 		
 		if(tmpTree->File) { //File
-			tmpTree->Path->CopyInto(*ElementName, tmpTree->Path->FindLast("/") + 1, tmpTree->Path->CountChars());
-			tmpTree->Path->CopyInto(*RecentElement, tmpTree->Path->FindFirst("/"), tmpTree->Path->FindLast("/"));
+			tmpTree->Path.CopyInto(*ElementName, tmpTree->Path.FindLast("/") + 1, tmpTree->Path.CountChars());
+			tmpTree->Path.CopyInto(*RecentElement, tmpTree->Path.FindFirst("/"), tmpTree->Path.FindLast("/"));
 			*RecentElement += "\0";
 			
 			NextElement->SetTo(*innerProject);
@@ -397,7 +415,7 @@ LavaProjectManager::_writeToPorject(BList *nodes, BString *innerProject)
 				if(fNode->WriteAttr("LAVA:Parent", B_STRING_TYPE, 0, RecentElement->String(), RecentElement->Length()) == B_FILE_ERROR)
 					throw new ProjectManagerException(new BString("can't write parent attr. to project file (LavaProjectManager::_writeToPorject())"), fObjDir, fNode, fObjFile, &fEntry);
 
-				if(fNode->WriteAttr("LAVA:PathToFile", B_STRING_TYPE, 0, tmpTree->Path->String(), tmpTree->Path->Length()) == B_FILE_ERROR)
+				if(fNode->WriteAttr("LAVA:PathToFile", B_STRING_TYPE, 0, tmpTree->Path.String(), tmpTree->Path.Length()) == B_FILE_ERROR)
 					throw new ProjectManagerException(new BString("can't write PathToFile attr. to project file (LavaProjectManager::_writeToPorject())"), fObjDir, fNode, fObjFile, &fEntry);
 			
 				if(fNode->WriteAttr("LAVA:Size", B_INT64_TYPE, 0, tmpTree->intSize, 8) == B_FILE_ERROR)
@@ -414,8 +432,8 @@ LavaProjectManager::_writeToPorject(BList *nodes, BString *innerProject)
 		}
 		else { //Folder
 			fObjDir->SetTo(innerProject->String());
-			tmpTree->Path->CopyInto(*ElementName, tmpTree->Path->FindLast("/") + 1, tmpTree->Path->CountChars());
-			tmpTree->Path->CopyInto(*RecentElement, tmpTree->Path->FindFirst("/"), tmpTree->Path->FindLast("/"));
+			tmpTree->Path.CopyInto(*ElementName, tmpTree->Path.FindLast("/") + 1, tmpTree->Path.CountChars());
+			tmpTree->Path.CopyInto(*RecentElement, tmpTree->Path.FindFirst("/"), tmpTree->Path.FindLast("/"));
 			*RecentElement += "\0";
 			NextElement->SetTo(*innerProject);
 			*NextElement += "/";
@@ -435,7 +453,7 @@ LavaProjectManager::_writeToPorject(BList *nodes, BString *innerProject)
 				if(fNode->WriteAttr("LAVA:Parent", B_STRING_TYPE, 0, RecentElement->String(), RecentElement->Length()) == B_FILE_ERROR)
 					throw new ProjectManagerException(new BString("can't write parent attr. to project folder (LavaProjectManager::_writeToPorject())"), fObjDir, fNode, fObjFile, &fEntry);
 				
-				if(fNode->WriteAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, tmpTree->Path->String(), tmpTree->Path->Length()) == B_FILE_ERROR)
+				if(fNode->WriteAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, tmpTree->Path.String(), tmpTree->Path.Length()) == B_FILE_ERROR)
 					throw new ProjectManagerException(new BString("can't write PathToFolder attr. to project folder (LavaProjectManager::_writeToPorject())"), fObjDir, fNode, fObjFile, &fEntry);
 				
 				if(fNode->WriteAttr("LAVA:Type", B_STRING_TYPE, 0, "subfolder", sizeof("subfolder")) == B_FILE_ERROR)

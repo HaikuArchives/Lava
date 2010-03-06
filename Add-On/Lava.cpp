@@ -38,44 +38,37 @@ LavaProject* create_or_open_Project(WaitWindow *fWaitWindow, FileTree *objFileTr
 		fWaitWindow->HideWait();
 		
 		switch((new BAlert("", "Creat a new project or open a existing?", "Cancel", "New", "Open"))->Go()) {
-			case 1: //New project
-			{
+			case 1: { //New project
 				objLavaProjectManager->CreateNewProject(*DiscType);
 				fWaitWindow->StartWait();
 				objProject = objLavaProjectManager->AddToPorject(objFileTree);
-				objProject->ProjectStructure->AddTreeToBMsg(objMsg);
-				objProject->ProjectStructure->AddFisrtInstanceAsRefToBMsg(objMsg);
-				objMsg->AddString("PojectName", (objProject->getProjectName())->String());
-				*Size = objProject->ProjectSize;
-				return objProject;
 				break;
 			}
-			case 2: //Open project
-			{	
+			case 2: { //Open project
 				objLavaProjectManager->OpenPorject();
 				fWaitWindow->StartWait();
 				objProject = objLavaProjectManager->AddToPorject(objFileTree, *DiscType);
-				objProject->ProjectStructure->AddTreeToBMsg(objMsg);
-				objProject->ProjectStructure->AddFisrtInstanceAsRefToBMsg(objMsg);
-				objMsg->AddString("PojectName", (objProject->getProjectName())->String());
-				*Size = objProject->ProjectSize;
 				
 				if(*DiscType != objProject->DiscType && *Size > 734003200)
 					*DiscType = DATADVD;
 				else if(*DiscType != objProject->DiscType && *Size < 734003200)
 					*DiscType = DATACD;
 				
-				return objProject;
 				break;
 			}
-			default: //Cancel
-			{
+			default: { //Cancel
 				throw new LavaMainException(new BString("adding files to project canceled"));
 				break;
 			}
 		}
+		
+		objProject->ProjectStructure->AddTreeToBMsg(objMsg);
+		objProject->ProjectStructure->AddFisrtInstanceAsRefToBMsg(objMsg);
+		*Size = objProject->ProjectSize;
+		objMsg->AddString("PojectName", (objProject->getProjectName())->String());
+		objMsg->AddString("ProjectPath", objLavaProjectManager->getActProjectPath());
 	}
-	else{
+	else {
 		objProject = objLavaProjectManager->OpenPorject(actPro);
 		
 		if(*DiscType != PORJECT)
@@ -84,6 +77,7 @@ LavaProject* create_or_open_Project(WaitWindow *fWaitWindow, FileTree *objFileTr
 		objProject->ProjectStructure->AddTreeToBMsg(objMsg);
 		objProject->ProjectStructure->AddFisrtInstanceAsRefToBMsg(objMsg);
 		objMsg->AddString("PojectName", (objProject->getProjectName())->String());
+		objMsg->AddString("ProjectPath", objLavaProjectManager->getActProjectPath());
 		*Size = objProject->ProjectSize;
 				
 		if(*DiscType != PORJECT && (*DiscType != objProject->DiscType && *Size > 734003200))
@@ -92,9 +86,12 @@ LavaProject* create_or_open_Project(WaitWindow *fWaitWindow, FileTree *objFileTr
 			*DiscType = DATACD;
 		else
 			*DiscType = objProject->DiscType;
-		
-		return objProject;
 	}
+	
+	//copy lava project to BMessage
+	objProject->Archive(objMsg);
+	
+	return objProject;
 }
 
 extern "C" void
@@ -227,7 +224,7 @@ process_refs(entry_ref dir_ref, BMessage *msg, void *)
 		delete e;
 		fWaitWindow->QuitWait();
 	}
-	catch(LoggingException *e) { //onliest exception which can not be logged ;)
+	catch(LoggingException *e) { //exception which can not be logged ;)
 		(new BAlert("", e->ExceptionText->String(), "Exit"))->Go();
 		delete e;
 		fWaitWindow->QuitWait();

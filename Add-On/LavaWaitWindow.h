@@ -27,41 +27,39 @@
 
 class WaitWindowView;
 
-class WaitWindow: public BWindow
-{
+class WaitWindow: public BWindow {
 	public:
-			WaitWindow(BMessage *msg, pid_t PID);
-			~WaitWindow();
-			virtual     bool    QuitRequested();
-			virtual     void	MessageReceived(BMessage* msg);
-						void	HideWait();
-						void	StartWait();
-						void	QuitWait();
-						BString* getStateContainer();
-						BString *State;
+		WaitWindow(BMessage *msg, pid_t PID);
+		~WaitWindow();
+		virtual bool QuitRequested();
+		virtual void MessageReceived(BMessage* msg);
+		void HideWait();
+		void StartWait();
+		void QuitWait();
+		BString* getStateContainer();
+		BString *State;
 	private:
-						pid_t 	fParentID;
-			static		int32	_DelayThread(void *data);
-			static		int32	_ReadState(void *data);
-						bool	fQuited;
-						sem_id	fSemQuit;
-						sem_id	fSemQuitedAble;
-						WaitWindowView* fView;
-						thread_id fWaitWinThreadID;
-						bool	fQuitStateThread;
-						thread_id fStateThreadID;
+		pid_t fParentID;
+		static int32 _DelayThread(void *data);
+		static int32 _ReadState(void *data);
+		bool fQuited;
+		sem_id fSemQuit;
+		sem_id fSemQuitedAble;
+		WaitWindowView* fView;
+		thread_id fWaitWinThreadID;
+		bool fQuitStateThread;
+		thread_id fStateThreadID;
 };
 
-class WaitWindowView: public BView
-{
+class WaitWindowView: public BView {
 	public:
-			WaitWindowView();
-			~WaitWindowView();
-			AnimationBox * fAnimationBox;
-			BStringView *StateMessageView;
-			virtual void Draw(BRect updatetRect);
+		WaitWindowView();
+		~WaitWindowView();
+		AnimationBox *fAnimationBox;
+		BStringView *StateMessageView;
+		virtual void Draw(BRect updatetRect);
 	private:
-			BButton* fCancelButton;
+		BButton* fCancelButton;
 			
 };
 

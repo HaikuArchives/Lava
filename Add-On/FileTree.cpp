@@ -1,3 +1,11 @@
+/*
+ * Copyright 2007 Team MAUI All rights reserved.
+ * Distributed under the terms of the MIT License.
+ *
+ * Authors:
+ *		Robert Stiehler, Negr0@team-maui.org
+*/
+
 #include "FileTree.h"
 #include <Alert.h>
 
@@ -7,7 +15,23 @@ FileTree::FileTree()
 }
 
 
-FileTree::FileTree(BString *pPath, bool pFile, int64 *pintSize, bool pQuery)
+FileTree::FileTree(BMessage* archive)
+: Nodes(new BList()), intSize(new int64(0))
+{
+	BMessage objMessage;
+	if(archive->FindMessage("Nodes", &objMessage) == B_OK) {
+		FileTree *tmp = cast_as(Instantiate(&objMessage), FileTree);
+		Nodes->AddItem(tmp);
+	}
+	
+	archive->FindBool("File", File);
+	archive->FindBool("Query", Query);
+	archive->FindString("Path", &Path);
+	archive->FindInt64("intSize", intSize);	
+}
+
+
+FileTree::FileTree(BString pPath, bool pFile, int64 *pintSize, bool pQuery)
 : Path(pPath), intSize(pintSize)
 {
 	Nodes = new BList();
@@ -18,8 +42,9 @@ FileTree::FileTree(BString *pPath, bool pFile, int64 *pintSize, bool pQuery)
 
 FileTree::~FileTree()
 {
-	delete Path, Nodes, intSize;
+	delete Nodes, intSize;
 }
+
 
 /*	printNodes
 *	little helping method to print tree to console
@@ -46,7 +71,7 @@ FileTree::printNodes(BList *nodes)
 	for(int i = 0; i < nodes->CountItems(); i++) {
 		tmpTree = (FileTree*)nodes->ItemAt(i);
 		(new BAlert("", "Schleife", "Exit"))->Go();
-		(new BAlert("", tmpTree->Path->String(), "Exit"))->Go();
+		(new BAlert("", tmpTree->Path.String(), "Exit"))->Go();
 		
 		printNodes(tmpTree->Nodes);
 	}
@@ -64,7 +89,7 @@ FileTree::_addTreeToBMsg(BList *nodes)
 
 	for(int i = 0; i < nodes->CountItems(); i++) {
 		tmpTree = (FileTree*)nodes->ItemAt(i);
-		fObjMsg->AddInt64(tmpTree->Path->String(), *tmpTree->intSize);
+		fObjMsg->AddInt64(tmpTree->Path.String(), *tmpTree->intSize);
 		_addTreeToBMsg(tmpTree->Nodes);
 	}
 }
@@ -82,6 +107,10 @@ FileTree::AddTreeToBMsg(BMessage *objMsg)
 }
 
 
+/*	AddFisrtInstanceAsRefToBMsg
+	method adds refs of the files and folders of the "root" folder
+	of the selected files to BMessage
+*/
 void
 FileTree::AddFisrtInstanceAsRefToBMsg(BMessage *objMsg)
 {
@@ -91,7 +120,7 @@ FileTree::AddFisrtInstanceAsRefToBMsg(BMessage *objMsg)
 
 	for(int i = 0; i < Nodes->CountItems(); i++) {
 		tmpTree = (FileTree*)Nodes->ItemAt(i);
-		objEntry->SetTo(tmpTree->Path->String());
+		objEntry->SetTo(tmpTree->Path.String());
 		objEntry->GetRef(file_ref);		
 		objMsg->AddRef("refs", file_ref);
 	}
@@ -101,8 +130,7 @@ FileTree::AddFisrtInstanceAsRefToBMsg(BMessage *objMsg)
 
 
 /*	getNode
-*	searchs for a FileTree object with content x
-*	and returns reference of an FileTree object
+*	searchs for a FileTree object and returns reference of an FileTree object
 *	method gets a reference of BList with FileTree objec and a path
 */
 FileTree*
@@ -113,7 +141,7 @@ FileTree::getNode(BList *nodes, BString *Path)
 	for(int i = 0; i < nodes->CountItems(); i++) {
 		tmpTree = (FileTree*)nodes->ItemAt(i);
 				
-		if(*tmpTree->Path == *Path)
+		if(tmpTree->Path == *Path)
 			return tmpTree;
 		else
 			tmpTree = getNode(tmpTree->Nodes, Path);
@@ -136,9 +164,54 @@ FileTree::AddNode(BString Parent, BString Path, bool File, int64 *intSize, bool 
 	tmpTree = getNode(Nodes, &Parent);
 	
 	if(tmpTree == NULL) {
-		Nodes->AddItem(new FileTree(new BString(Path.String()), File, intSize, Query));
+		Nodes->AddItem(new FileTree(Path, File, intSize, Query));
 	}
 	else {
-		tmpTree->Nodes->AddItem(new FileTree(new BString(Path.String()), File, intSize, Query));
+		tmpTree->Nodes->AddItem(new FileTree(Path, File, intSize, Query));
+	}
+}
+
+
+/*	Instantiate
+*	rebuild archived object from BMessage
+*/
+BArchivable*
+FileTree::Instantiate(BMessage* archive)
+{
+	if(validate_instantiation(archive, "FileTree")) 
+		return new FileTree(archive); 
+	
+	return NULL; 
+}
+
+
+/*	Archive
+	method build an archive of this object and save it to the given BMessage
+*/
+status_t
+FileTree::Archive(BMessage* archive, bool deep) const
+{
+	try {
+		archive->AddString("class", "FileTree");
+		
+		if(deep) {
+			FileTree *tmpTree = NULL;
+			
+			for(int i = 0; i < Nodes->CountItems(); i++) {
+				tmpTree = (FileTree*)Nodes->ItemAt(i);
+				BMessage objMessage;
+				
+	 			if(tmpTree->Archive(&objMessage, deep) == B_OK)
+	 				archive->AddMessage("Nodes", &objMessage);
+			}
+		}
+		
+		archive->AddBool("File", File);
+		archive->AddBool("Query", Query);
+		archive->AddString("Path", Path.String());
+		archive->AddInt64("intSize", (int64)intSize);
+	}
+	catch(...) {
+		return B_ERROR;
 	}
 }

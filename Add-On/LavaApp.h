@@ -4,6 +4,7 @@
  *
  * Authors:
  *		Ralf Schülke, teammaui@web.de
+ *		Robert Stiehler, Negr0@team-maui.org
  */
  
 #ifndef LAVAAPP_H
@@ -13,9 +14,7 @@
 #define kMsgD 'datc'
 #define kMsgDexternel 'ext'
 
-/*
-// Difine this in ProjectTypeSelector.h
-#define CDIMAGE 0
+/*#define CDIMAGE 0
 #define DATACD 1
 #define AUDIOCD 2
 #define VCD 3
@@ -37,18 +36,15 @@
 #include "LavaBurnStatusWindow.h"
 #include "ProjectTypeSelector.h"
 
-class App: public BApplication
-{
+class App: public BApplication {
 	public:
 			App();
 			~App();
-			virtual     bool    QuitRequested();
-			virtual     void	MessageReceived(BMessage* msg);	
-			
+			virtual		bool	QuitRequested();
+			virtual		void	MessageReceived(BMessage* msg);	
 	private:
 			BString* fProjectNameString;
-			BString* fWindowTitleString;
-			
+			BString* fWindowTitleString;			
 };
 
 #endif

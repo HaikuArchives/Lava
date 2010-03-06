@@ -9,7 +9,7 @@
 #include "LavaWaitWindow.h"
 
 WaitWindow::WaitWindow(BMessage *msg, pid_t PID)
-	: BWindow(BRect(110,80,380,180),"analyze files", B_TITLED_WINDOW, B_NOT_CLOSABLE | B_NOT_RESIZABLE | B_NOT_ZOOMABLE, 0)
+: BWindow(BRect(110, 80, 380, 180), "analyze files", B_TITLED_WINDOW, B_NOT_CLOSABLE | B_NOT_RESIZABLE | B_NOT_ZOOMABLE, 0)
 {
 	fParentID = PID;
 	fQuited = false;
@@ -62,18 +62,20 @@ WaitWindow::_DelayThread(void *data)
 	return 0;
 }
 
+
 BString*
 WaitWindow::getStateContainer()
 {
 	return State;
 }
 
+
 int32
 WaitWindow::_ReadState(void *data)
 {
 	WaitWindow *WaitWin = (WaitWindow*)data;
 	
-	while(!WaitWin->fQuitStateThread){
+	while(!WaitWin->fQuitStateThread) {
 		snooze(15000);
 		WaitWin->fView->LockLooper();
 		WaitWin->fView->StateMessageView->SetText(WaitWin->State->String());
@@ -122,38 +124,38 @@ void
 WaitWindow::MessageReceived(BMessage* msg)
 {	
 	switch (msg->what) {	
-		case 'canc':
-		{	
+		case 'canc': {	
 			kill_thread(fStateThreadID);
 			kill_thread(fParentID);
 			Quit();
 			break;
 		}
-		default:
+		default: {
 			BWindow::MessageReceived(msg);
 			break;
+		}
 	}
 }
 
 
 WaitWindowView::WaitWindowView()
-: BView(BRect(0,0,270,100), "", B_FOLLOW_ALL, B_WILL_DRAW)
+: BView(BRect(0, 0, 270, 100), "", B_FOLLOW_ALL, B_WILL_DRAW)
 {	
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	
 	// AnimationBox
-	BRect AnimationBoxRect = BRect(BPoint(Bounds().left+15, Bounds().top+15), BPoint(Bounds().right-16, Bounds().top+30));
+	BRect AnimationBoxRect = BRect(BPoint(Bounds().left + 15, Bounds().top + 15), BPoint(Bounds().right - 16, Bounds().top + 30));
 	fAnimationBox = new AnimationBox(AnimationBoxRect, "", B_FOLLOW_ALL, B_WILL_DRAW | B_FRAME_EVENTS);
 	AddChild(fAnimationBox);
 	
 	//StateMessageView
-	BRect StateMessageViewRect = BRect(BPoint(Bounds().left+15, Bounds().top+35), BPoint(Bounds().right-16, Bounds().top+55));
-	StateMessageView = new BStringView(StateMessageViewRect,"Message","", B_FOLLOW_ALL, B_WILL_DRAW);
+	BRect StateMessageViewRect = BRect(BPoint(Bounds().left + 15, Bounds().top + 35), BPoint(Bounds().right - 16, Bounds().top + 55));
+	StateMessageView = new BStringView(StateMessageViewRect, "Message", "", B_FOLLOW_ALL, B_WILL_DRAW);
 	AddChild(StateMessageView);
 	
 	//CancelButton
-	BRect CancelButtonRect = BRect(BPoint(Bounds().left+190, Bounds().top+70), BPoint(Bounds().right-16, Bounds().top+90));
-	fCancelButton = new BButton(CancelButtonRect,"CancelButton","Cancel",new BMessage('canc'), B_FOLLOW_ALL,B_WILL_DRAW);
+	BRect CancelButtonRect = BRect(BPoint(Bounds().left + 190, Bounds().top + 70), BPoint(Bounds().right - 16, Bounds().top + 90));
+	fCancelButton = new BButton(CancelButtonRect, "CancelButton", "Cancel", new BMessage('canc'), B_FOLLOW_ALL, B_WILL_DRAW);
 	AddChild(fCancelButton);
 }
 
@@ -167,17 +169,15 @@ void
 WaitWindowView::Draw(BRect updatetRect)
 {
 
-	const rgb_color  darker_grey  =  {108,108,108,255};
-	const rgb_color  plain_white  =  {255,255,255,255};
-	const rgb_color  deep_black  =  {255,255,255,255};
+	const rgb_color  darker_grey  =  {108, 108, 108, 255};
+	const rgb_color  plain_white  =  {255, 255, 255, 255};
+	const rgb_color  deep_black  =  {255, 255, 255, 255};
 
 	// divider 
 	SetHighColor(darker_grey);
-	StrokeLine (BPoint(Bounds().left+15, Bounds().top+61), 
-				BPoint(Bounds().right-16, Bounds().top+61));
+	StrokeLine(BPoint(Bounds().left + 15, Bounds().top + 61), BPoint(Bounds().right - 16, Bounds().top + 61));
 	
 	SetHighColor(plain_white);
-	StrokeLine (BPoint(Bounds().left+15, Bounds().top+62), 
-				BPoint(Bounds().right-16, Bounds().top+62));
+	StrokeLine(BPoint(Bounds().left + 15, Bounds().top + 62), BPoint(Bounds().right - 16, Bounds().top + 62));
 
 }

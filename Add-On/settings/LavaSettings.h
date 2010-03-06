@@ -11,8 +11,7 @@
 
 #include "iosettings.h"
 
-class LavaSettings : public IOSettings
-{
+class LavaSettings : public IOSettings {
 public:
 	LavaSettings();
 	virtual ~LavaSettings();

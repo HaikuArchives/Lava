@@ -22,8 +22,7 @@
 #define OPEN 'open'
 #define SAVE 'save'
 
-class LavaFilePanel: public BLooper
-{
+class LavaFilePanel: public BLooper {
 	public:
 		LavaFilePanel();
 		~LavaFilePanel();

@@ -19,19 +19,16 @@
 #include "bitmaps/Bitmap_CD24.h"
 //static const uint32 kMsgX = 'xxxx';
 
-class BurnStatusView: public BView
-{
+class BurnStatusView: public BView {
 	public:
-			BurnStatusView(BRect frame, int ViewType);
-			~BurnStatusView();
-			virtual void 	Draw(BRect updateRect);
-			BStatusBar* fStatusBarBurn;
-  			
+		BurnStatusView(BRect frame, int ViewType);
+		~BurnStatusView();
+		virtual void Draw(BRect updateRect);
+		BStatusBar *fStatusBarBurn;
 	private:
-			//
-			BBitmap* fBitmapType;
-			//BStatusBar* fStatusBarBurn;
-			BButton* fButtonStop;
+		BBitmap* fBitmapType;
+		//BStatusBar* fStatusBarBurn;
+		BButton* fButtonStop;
 };
 
 #endif

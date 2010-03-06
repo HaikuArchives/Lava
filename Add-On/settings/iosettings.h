@@ -18,8 +18,7 @@
 
 #include "../Exceptions/IOSettingsException.h"
 
-class IOSettings
-{
+class IOSettings {
 public:
 	IOSettings(BString SettingsName);
 	virtual ~IOSettings();

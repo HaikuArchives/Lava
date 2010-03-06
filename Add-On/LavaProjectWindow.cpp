@@ -4,6 +4,7 @@
  *
  * Authors:
  *		Ralf Schülke, teammaui@web.de
+ *		Robert Stiehler, Negr0@team-maui.org
  */
 
 #include <stdio.h>
@@ -16,54 +17,51 @@
 #include <InterfaceKit.h> 
 #include <StorageKit.h> 
 
-#include "FileAccess.h"
 #include "LavaProjectWindow.h"
-//#include "../BurnDevice/BurnDevice.h"
 
 ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
-	:BWindow(frame, "Lava", B_TITLED_WINDOW,B_NOT_RESIZABLE | B_NOT_ZOOMABLE, 0)
+: BWindow(frame, "Lava", B_TITLED_WINDOW,B_NOT_RESIZABLE | B_NOT_ZOOMABLE, 0)
 {
 	fobjLogging = new Logging();
 	fobjLogging->WriteAsAttribute();
 	fobjLogging->setLogfileDirectory(B_USER_SETTINGS_DIRECTORY);
 	fobjLogging->setLogfileName("Lava");
 
-	float kX = frame.Width()-frame.Width();
-	float kY = frame.Height()-frame.Height();
+	float kX = frame.Width() - frame.Width();
+	float kY = frame.Height() - frame.Height();
 	float kW = frame.Width();
 	float kH = frame.Height();	
-	frame.Set(kX,kY,kW,kH);
+	frame.Set(kX, kY, kW, kH);
 	
-	const rgb_color kRGB1 = {255,255,255,255};
-	const rgb_color kRGB2 = {195,195,195,255};
+	const rgb_color kRGB1 = {255, 255, 255, 255};
+	const rgb_color kRGB2 = {195, 195, 195, 255};
 	
 	FileAccess objFileAccess;
 	
-	switch (WindowType)
-	{
+	switch (WindowType) {
 		case 0: {
 			// ProjectWindow
-
+			
 			//MainView
 			fMainView = new BView(frame, "", B_FOLLOW_ALL, B_WILL_DRAW);
 			fMainView->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-
+			
 			//ColumnView 
-			fColumnView = new BColumnListView(BRect(kX+10,kY+10,kW-10,kH-53),"",B_FOLLOW_ALL,B_WILL_DRAW |B_NAVIGABLE, B_PLAIN_BORDER,true);
+			fColumnView = new BColumnListView(BRect(kX + 10, kY + 10, kW - 10, kH - 53), "", B_FOLLOW_ALL, B_WILL_DRAW | B_NAVIGABLE, B_PLAIN_BORDER, true);
 			fColumnView->SetColor(B_COLOR_BACKGROUND, kRGB1);
 			fColumnView->SetColor(B_COLOR_ROW_DIVIDER, kRGB1);
 			fColumnView->SetColor(B_COLOR_SELECTION, kRGB2);
 			fColumnView->SetSelectionMode(B_SINGLE_SELECTION_LIST);
 			
-			fStatusView = new BView(Bounds(), "",B_FOLLOW_ALL, B_WILL_DRAW);
+			fStatusView = new BView(Bounds(), "", B_FOLLOW_ALL, B_WILL_DRAW);
 			fStatusView->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-			fStatusStringView = new BStringView(BRect(0,0,152,15), "size", "Size:");
+			fStatusStringView = new BStringView(BRect(0, 0, 152, 15), "size", "Size:");
 			fStatusView->AddChild(fStatusStringView);
 			fColumnView->AddStatusView(fStatusView);
 			
 			fIconColumnName = new BBitmapColumn("", (float)20, (float)20, (float)20, B_ALIGN_CENTER);
-			fStringColumnName = new BStringColumn("name", 200-20, 30, 400,0, B_ALIGN_LEFT);
-			fSizeColumnSize = new BSizeColumn("size", 92-25, 30, 92, B_ALIGN_LEFT);
+			fStringColumnName = new BStringColumn("name", 200 - 20, 30, 400, 0, B_ALIGN_LEFT);
+			fSizeColumnSize = new BSizeColumn("size", 92 - 25, 30, 92, B_ALIGN_LEFT);
 			
 			fColumnView->AddColumn(fIconColumnName, 0);
 			fColumnView->AddColumn(fStringColumnName, 1);
@@ -73,12 +71,12 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 			//MenuBox
 			fMenuType = new BMenu("Select"); //Dummy
 			fMenuType->SetLabelFromMarked(true);
-			fMenuFieldTypeItem = new BMenuField(BRect(10,kY+kH-35,250,kH-15),"projecttype","Type: ",fMenuType);
+			fMenuFieldTypeItem = new BMenuField(BRect(10, kY + kH - 35, 250, kH - 15), "projecttype", "Type: ", fMenuType);
 			fMenuFieldTypeItem->SetDivider(be_plain_font->StringWidth("Type: "));
-			fMenuItemDataCD = new BMenuItem("Data CD",new BMessage('dcd'), 0, 0);
-			fMenuItemAudioCD = new BMenuItem("Audio CD",new BMessage('acd'), 0, 0);
-			fMenuItemDataDVD= new BMenuItem("Data DVD",new BMessage('ddvd'), 0, 0);
-			fMenuItemAudioDVD = new BMenuItem("Audio DVD",new BMessage('advd'), 0, 0);
+			fMenuItemDataCD = new BMenuItem("Data CD", new BMessage('dcd'), 0, 0);
+			fMenuItemAudioCD = new BMenuItem("Audio CD", new BMessage('acd'), 0, 0);
+			fMenuItemDataDVD= new BMenuItem("Data DVD", new BMessage('ddvd'), 0, 0);
+			fMenuItemAudioDVD = new BMenuItem("Audio DVD", new BMessage('advd'), 0, 0);
 			fMainView->AddChild(fMenuFieldTypeItem);
 			
 			int32 DiscType;
@@ -117,16 +115,22 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 					break;
 			}
 			
+			/*BArchivable *unarchived = instantiate_object(msg); 
+			if(unarchived) {
+				LavaProject *test = cast_as(unarchived, LavaProject); 
+				if(test){
+				} 
+			}*/
+			
+			BArchivable *unarchived = LavaProject::Instantiate(msg);
 			
 			//BurnButton
-			fBurnButton = new BButton(BRect(kX+kW-100,kY+kH-35,kW-10,kH-15),"BurnProject","Burn",new BMessage('burn') ,B_FOLLOW_ALL,B_WILL_DRAW);
-			fMainView->AddChild(fBurnButton);	
-			
+			fBurnButton = new BButton(BRect(kX + kW - 100, kY + kH - 35, kW - 10, kH - 15), "BurnProject", "Burn", new BMessage('burn') , B_FOLLOW_ALL, B_WILL_DRAW);
+			fMainView->AddChild(fBurnButton);
 			
 			//Selectec Files, initalisiert in Lava.cpp	
-			for (int refs = 0; msg->FindRef("refs", refs, &fFile_ref) == B_NO_ERROR; refs++) {
-				
-				fEntry.SetTo(&fFile_ref); 
+			for(int refs = 0; msg->FindRef("refs", refs, &fFile_ref) == B_NO_ERROR; refs++) {
+				fEntry.SetTo(&fFile_ref);
 				fEntry.GetPath(&fPath);
 				fEntry.GetName(fName);
 				
@@ -147,23 +151,23 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 					
 				fColumnView->AddRow(fRow, (int32)refs);
 				//fColumnView->SetSortColumn(fStringColumnName,true, true); //sort by name
-				fColumnView->SetSortColumn(fSizeColumnSize,true, false); //sort by size
-				
+				fColumnView->SetSortColumn(fSizeColumnSize, true, false); //sort by size
 			}
-			
 			
 			fFileSizeString = new BString();
 			msg->FindInt64("size", &fFullItemsSize);
 			
-			if(fFullItemsSize>1048576) {
-				fFullItemsSize = ((fFullItemsSize/1024)/1024); //Umrechnung in MB
-				*fFileSizeString << fColumnView->CountRows(0) << " Items / " << (int64)fFullItemsSize << " " << "MB";
-			} else {
-				if(fFullItemsSize>1024) {
+			if(fFullItemsSize > 1048576) {
+				fFullItemsSize = ((fFullItemsSize / 1024) / 1024); //Umrechnung in MB
+				*fFileSizeString <<fColumnView->CountRows(0) <<" Items / " <<(int64)fFullItemsSize <<" " <<"MB";
+			}
+			else {
+				if(fFullItemsSize > 1024) {
 					fFullItemsSize = fFullItemsSize/1024;
-					*fFileSizeString << fColumnView->CountRows(0) << " Items / "<< (int64)fFullItemsSize << " " << "KB";
-				} else {
-					*fFileSizeString << fColumnView->CountRows(0) << " Items / "<< (int64)fFullItemsSize << " " << "bytes";
+					*fFileSizeString <<fColumnView->CountRows(0) <<" Items / "<<(int64)fFullItemsSize <<" " <<"KB";
+				}
+				else {
+					*fFileSizeString <<fColumnView->CountRows(0) <<" Items / "<<(int64)fFullItemsSize <<" " <<"bytes";
 				}
 			}
 			
@@ -178,8 +182,8 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 		}
 		case 1: {	
 			// 
-		}	
-	}	
+		}
+	}
 }
 
 ProjectWindow::~ProjectWindow()
@@ -200,8 +204,10 @@ ProjectWindow::MessageReceived(BMessage* msg)
 		case 'burn': {
 		// test stuff for developing of burning device (so it is much easy to debug it)
 		(new BAlert("", "Start Burning", "Exit"))->Go(); //Test Alert
-		//BurnDevice *tst = new BurnDevice(true, this, this);
-		//tst->SetDao(true);
+		/*
+		BurnDevice *tst = new BurnDevice(true, this, this);
+		tst->SetDao(true);
+		*/
 		
 			break;
 		}

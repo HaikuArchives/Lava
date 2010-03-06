@@ -9,23 +9,29 @@
 #ifndef LAVAPROJECTFT_H
 #define LAVAPROJECTFT_H
 
+#include <Archivable.h>
 #include <String.h>
 #include <Message.h>
 #include <List.h>
 #include <stdio.h>
 #include <Entry.h>
+#include <ClassInfo.h>
 
-class FileTree {
+class FileTree : public BArchivable {
 	public:
 		bool File;
 		bool Query;
-		BString *Path;
+		BString Path;
 		int64 *intSize;
-		BList *Nodes;
+		BList *Nodes; //objects from type FileTree
 		
 		/*FileTree::*/FileTree();
-		FileTree(BString *pPath, bool pFile, int64 *pintSize, bool pQuery);
+		/*FileTree::*/FileTree(BMessage* archive);
+		FileTree(BString pPath, bool pFile, int64 *pintSize, bool pQuery);
 		~FileTree();
+		
+		BArchivable* Instantiate(BMessage* archive);
+		virtual status_t Archive(BMessage* archive, bool deep = true) const;
 		
 		void AddNode(BString Parent, BString Path, bool File, int64 *intSize, bool Query);
 		void printNodes();
