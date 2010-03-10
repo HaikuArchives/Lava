@@ -8,7 +8,9 @@
 #ifndef TESTBURNDEVICE_H
 #define TESTBURNDEVICE_H
 
-#include <iostream.h>
+
+#include <iostream> //gcc4
+//#include <iostream.h> //gcc2
 #include <Alert.h>
 #include <Application.h>
 #include <Button.h>

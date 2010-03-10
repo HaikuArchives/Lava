@@ -235,10 +235,11 @@ LavaProjectManager::_readPorject(BString *Path)
 						if(fNode->ReadAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, buffer2, sizeof(buffer2)) == B_ENTRY_NOT_FOUND)
 							throw new ProjectManagerException(new BString("an Attr. PathToFolder doesn't exsist by some file (LavaProjectManager::_readPorject)"), fObjDir, fNode);
 						
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new int64 = tmpSize, true);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, &tmpSize, true);
+						//AddNode(BString Parent, BString Path, bool File, int64 *intSize, bool Query);
 					}
 					else {
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new int64 = tmpSize, false);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, &tmpSize, false);
 					}
 				}
 				else if(fObjDir->InitCheck() == B_OK) { //Folder
@@ -267,10 +268,10 @@ LavaProjectManager::_readPorject(BString *Path)
 						if(fNode->ReadAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, buffer2, sizeof(buffer2)) == B_ENTRY_NOT_FOUND)
 							throw new ProjectManagerException(new BString("an Attr. PathToFolder doesn't exsist by some file (LavaProjectManager::_readPorject)"), fObjDir, fNode);
 						
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, new int64 = tmpSize, true);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, &tmpSize, true);
 					}
 					else {
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, false, new int64 = tmpSize, false);
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, false, &tmpSize, false);
 					}
 					
 					_readPorject(new BString(fPathAndFile->String()));

@@ -3,7 +3,8 @@
 
 #include "BurnDevice.h"
 
-BurnDevice::BurnDevice(bool hasDebugOutput = true, BHandler *debugHandler = NULL, BHandler *errorHandler = NULL)
+//BurnDevice::BurnDevice(bool hasDebugOutput = true, BHandler *debugHandler = 0, BHandler *errorHandler = 0)
+BurnDevice::BurnDevice(bool hasDebugOutput, BHandler *debugHandler, BHandler *errorHandler)
 {
 	fDAO = " -dao";
 	fBurnProof = "";
@@ -187,7 +188,7 @@ void BurnDevice::BurnISOImage(BEntry *isoFile)
 	// BString tmpDevices = CallCDRecord("-scanbus | grep \"Removable CD-ROM\"");
 }
 
-BEntry* BurnDevice::CopyDisc(burn_device *source, burn_device *target = NULL, bool isAudioDisc = false, bool saveIso = false)
+BEntry* BurnDevice::CopyDisc(burn_device *source , burn_device *target, bool isAudioDisc, bool saveIso)
 {
 }
 
@@ -196,11 +197,11 @@ BEntry* BurnDevice::CreateISOFromDisc()
 }
 
 
-void BurnDevice::BlankDisc(burn_device *dev = NULL)
+void BurnDevice::BlankDisc(burn_device *dev)
 {
 }
 
-void BurnDevice::FixateDisc(burn_device *dev = NULL)
+void BurnDevice::FixateDisc(burn_device *dev)
 {
 }
 
@@ -254,7 +255,7 @@ BString BurnDevice::GetCDRecordInfo()
 }
 
 
-BString BurnDevice::CallCDRecord(BString param, bool callInBackground = false)
+BString BurnDevice::CallCDRecord(BString param, bool callInBackground)
 {
 	BString cdrecord, logFileName, retString;
 	logFileName << "/tmp/BurnDevice.log";
