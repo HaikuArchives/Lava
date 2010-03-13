@@ -7,3 +7,5 @@ Fixed Problems:
 	map<BString, void*> Data; to std::map<BString, void*> Data;
 
 - gcc4 now build, when used gcc2 plead edit the makefiles (see on LIBS = )
+
+- ...
