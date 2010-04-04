@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
@@ -7,6 +7,7 @@
 */
 
 #include "LavaProject.h"
+#include <Alert.h>
 
 LavaProject::LavaProject(BString Project)
 : fProject(new BString(Project)), ProjectStructure(new FileTree()), ProjectSize(0),
@@ -15,13 +16,13 @@ LavaProject::LavaProject(BString Project)
 }
 
 LavaProject::LavaProject(BMessage* archive)
-: ProjectStructure(new FileTree()), fProject(new BString())
+: fProject(new BString())
 {	
 	BMessage objMessage;
 	if(archive->FindMessage("ProjectStructure", &objMessage) == B_OK) {
-		ProjectStructure->Instantiate(&objMessage);
+		ProjectStructure = reinterpret_cast<FileTree*>(FileTree::Instantiate(&objMessage));
 	}
-	
+		
 	archive->FindInt64("ProjectSize", ProjectSize);
 	archive->FindInt32("DiscType", DiscType);
 	archive->FindString("fProject", fProject);
@@ -49,8 +50,9 @@ LavaProject::getProjectName()
 BArchivable*
 LavaProject::Instantiate(BMessage* archive)
 {
-	if(validate_instantiation(archive, "LavaProject")) 
+	if(validate_instantiation(archive, "LavaProject")) {
 		return new LavaProject(archive); 
+	}
 	
 	return NULL; 
 }

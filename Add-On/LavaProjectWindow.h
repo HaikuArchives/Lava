@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
@@ -24,7 +24,7 @@
 #include "column/ColumnListView.h"
 #include "LavaProject.h"
 #include "ProjectTypeSelector.h"
-//#include "../BurnDevice/BurnDevice.h"
+#include "../BurnDevice/BurnDevice.h"
 
 class ProjectWindow: public BWindow {
 	public:
@@ -67,6 +67,9 @@ class ProjectWindow: public BWindow {
 		BMenuItem* fMenuItemAudioDVD;
 		
 		Logging *fobjLogging;
+		
+		LavaProject *fLavaProject;
+		void _unarchivProjectFromAddon(BMessage *msg);
 };
 
 #endif

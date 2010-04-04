@@ -1,12 +1,11 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
  *		Robert Stiehler, Negr0@team-maui.org
 */
 
-//#include <dirent.h>
 #include "LavaProjectManager.h"
 
 LavaProjectManager::LavaProjectManager()
@@ -189,13 +188,13 @@ LavaProjectManager::OpenPorject()
 void
 LavaProjectManager::_readPorject(BString *Path)
 {
-	DIR *dir; // = new DIR;
+	DIR *dir;// = new DIR;
 	struct dirent *dirzeiger = new dirent;
 	int64 tmpSize = 0;
 	bool Query = false;
 	objTempPath = new BPath();
 		
-	if((dir =opendir(Path->String())) != NULL) {
+	if((dir = opendir(Path->String())) != NULL) {
 		while((dirzeiger=readdir(dir)) != NULL) {
 			if(strcmp((*dirzeiger).d_name, ".") != 0 && strcmp((*dirzeiger).d_name, "..") != 0) {					
 				fFileName->SetTo((*dirzeiger).d_name);
@@ -235,11 +234,14 @@ LavaProjectManager::_readPorject(BString *Path)
 						if(fNode->ReadAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, buffer2, sizeof(buffer2)) == B_ENTRY_NOT_FOUND)
 							throw new ProjectManagerException(new BString("an Attr. PathToFolder doesn't exsist by some file (LavaProjectManager::_readPorject)"), fObjDir, fNode);
 						
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, &tmpSize, true);
-						//AddNode(BString Parent, BString Path, bool File, int64 *intSize, bool Query);
+						int64 *tmp = new int64;
+						*tmp = tmpSize;
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, tmp, true);
 					}
 					else {
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, &tmpSize, false);
+						int64 *tmp = new int64;
+						*tmp = tmpSize;
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, tmp, false);
 					}
 				}
 				else if(fObjDir->InitCheck() == B_OK) { //Folder
@@ -267,11 +269,16 @@ LavaProjectManager::_readPorject(BString *Path)
 						memset(buffer2, 0, sizeof(buffer2));
 						if(fNode->ReadAttr("LAVA:PathToFolder", B_STRING_TYPE, 0, buffer2, sizeof(buffer2)) == B_ENTRY_NOT_FOUND)
 							throw new ProjectManagerException(new BString("an Attr. PathToFolder doesn't exsist by some file (LavaProjectManager::_readPorject)"), fObjDir, fNode);
-						
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, &tmpSize, true);
+
+						int64 *tmp = new int64;
+						*tmp = tmpSize;						
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, true, tmp, true);
 					}
 					else {
-						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, false, &tmpSize, false);
+						
+						int64 *tmp = new int64;
+						*tmp = tmpSize;
+						fLavaProject->ProjectStructure->AddNode(buffer2, buffer, false, tmp, false);
 					}
 					
 					_readPorject(new BString(fPathAndFile->String()));

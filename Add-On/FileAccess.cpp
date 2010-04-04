@@ -1,3 +1,11 @@
+/*
+ * Copyright 2010 Team MAUI All rights reserved.
+ * Distributed under the terms of the MIT License.
+ *
+ * Authors:
+ *		Robert Stiehler, Negr0@team-maui.org
+*/
+
 #include "FileAccess.h"
 #include <Alert.h>
 
@@ -199,8 +207,7 @@ FileAccess::getFilesFromQuery(BString strQueryFile, BString strParent, off_t *si
 off_t
 FileAccess::_walkThroughFolder(BString *Path)
 {
-	//DIR *dir = new DIR;
-	DIR *dir;
+	DIR *dir;// = new DIR();
 	struct dirent *dirzeiger = new dirent;
 	off_t TMP = 0;
 	off_t *ptFolderSize;
@@ -298,7 +305,8 @@ FileAccess::walkThroughFiles()
 		}
 	}
 	
-	//delete fDirectory, fFileAcces, fPathAndFile, fFileName, fNode, fQuery, fVolume, fVolumes, fEntry, fPath;
+	delete fDirectory, fFileAcces, fPathAndFile, fFileName, fNode, fQuery,
+			fVolume, fVolumes, fEntry, fPath;
 }
 
 

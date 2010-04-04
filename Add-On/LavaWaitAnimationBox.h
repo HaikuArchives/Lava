@@ -1,3 +1,5 @@
+// license: public domain
+// authors: jonas.sundstrom@kirilla.com
 #ifndef _ANIMATIONBOX_H_
 #define _ANIMATIONBOX_H_
 

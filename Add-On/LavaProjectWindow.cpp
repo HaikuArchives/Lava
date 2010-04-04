@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
@@ -41,6 +41,8 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 	switch (WindowType) {
 		case 0: {
 			// ProjectWindow
+			
+			_unarchivProjectFromAddon(msg);			
 			
 			//MainView
 			fMainView = new BView(frame, "", B_FOLLOW_ALL, B_WILL_DRAW);
@@ -114,16 +116,7 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 					fMenuType->AddItem(fMenuItemAudioDVD);*/
 					break;
 			}
-			
-			/*BArchivable *unarchived = instantiate_object(msg); 
-			if(unarchived) {
-				LavaProject *test = cast_as(unarchived, LavaProject); 
-				if(test){
-				} 
-			}*/
-			
-			BArchivable *unarchived = LavaProject::Instantiate(msg);
-			
+						
 			//BurnButton
 			fBurnButton = new BButton(BRect(kX + kW - 100, kY + kH - 35, kW - 10, kH - 15), "BurnProject", "Burn", new BMessage('burn') , B_FOLLOW_ALL, B_WILL_DRAW);
 			fMainView->AddChild(fBurnButton);
@@ -171,8 +164,6 @@ ProjectWindow::ProjectWindow(BRect frame,int WindowType, BMessage *msg)
 				}
 			}
 			
-			//Debug Alert
-			//(new BAlert("", fFileSizeString->String(), "Exit"))->Go();	
 			fStatusStringView->SetText(fFileSizeString->String());
 	
 			Lock();
@@ -204,10 +195,8 @@ ProjectWindow::MessageReceived(BMessage* msg)
 		case 'burn': {
 		// test stuff for developing of burning device (so it is much easy to debug it)
 		(new BAlert("", "Start Burning", "Exit"))->Go(); //Test Alert
-		/*
-		BurnDevice *tst = new BurnDevice(true, this, this);
-		tst->SetDao(true);
-		*/
+		//BurnDevice *tst = new BurnDevice(true, this, this);
+		//tst->SetDao(true);
 		
 			break;
 		}
@@ -246,4 +235,9 @@ ProjectWindow::MessageReceived(BMessage* msg)
 			BWindow::MessageReceived(msg);
 			break;
 	};
-};
+}
+
+void
+ProjectWindow::_unarchivProjectFromAddon(BMessage *msg) {
+	fLavaProject = reinterpret_cast<LavaProject*>(LavaProject::Instantiate(msg));
+}

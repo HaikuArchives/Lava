@@ -1,3 +1,10 @@
+/*
+ * Copyright 2010 Team MAUI All rights reserved.
+ * Distributed under the terms of the MIT License.
+ *
+ * Authors:
+ *		Robert Stiehler, Negr0@team-maui.org
+*/
 #include "LavaFilePanel.h"
 
 LavaFilePanel::LavaFilePanel()

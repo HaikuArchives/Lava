@@ -1,9 +1,15 @@
+/*
+ * Copyright 2010 Team MAUI All rights reserved.
+ * Distributed under the terms of the MIT License.
+ *
+ * Authors:
+ *		Robert Stiehler, Negr0@team-maui.org
+ */
 #include <stdlib.h>
 #include <File.h>
 
 #include "BurnDevice.h"
 
-//BurnDevice::BurnDevice(bool hasDebugOutput = true, BHandler *debugHandler = 0, BHandler *errorHandler = 0)
 BurnDevice::BurnDevice(bool hasDebugOutput, BHandler *debugHandler, BHandler *errorHandler)
 {
 	fDAO = " -dao";
@@ -172,6 +178,8 @@ void BurnDevice::BurnISOImage(BEntry *isoFile)
 			case BD_FULL_DISC:
 				SendErrorMsg("Disc full");
 				break;
+			default:
+				break;
 		}
 		return;
 	}
@@ -188,7 +196,7 @@ void BurnDevice::BurnISOImage(BEntry *isoFile)
 	// BString tmpDevices = CallCDRecord("-scanbus | grep \"Removable CD-ROM\"");
 }
 
-BEntry* BurnDevice::CopyDisc(burn_device *source , burn_device *target, bool isAudioDisc, bool saveIso)
+BEntry* BurnDevice::CopyDisc(burn_device *source, burn_device *target, bool isAudioDisc, bool saveIso)
 {
 }
 

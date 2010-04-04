@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
@@ -16,6 +16,7 @@
 
 class LavaProject : public BArchivable {
 	public:
+		BString* getProjectName();
 		LavaProject(BString PathToProject);
 		LavaProject(BMessage* archive);
 		~LavaProject();
@@ -23,7 +24,6 @@ class LavaProject : public BArchivable {
 		static BArchivable* Instantiate(BMessage* archive);
 		virtual status_t Archive(BMessage* archive, bool deep = true) const;
 		
-		BString* getProjectName();
 		FileTree *ProjectStructure;
 		off_t ProjectSize;
 		int DiscType;

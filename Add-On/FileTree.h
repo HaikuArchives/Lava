@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
@@ -25,12 +25,12 @@ class FileTree : public BArchivable {
 		int64 *intSize;
 		BList *Nodes; //objects from type FileTree
 		
-		/*FileTree::*/FileTree();
-		/*FileTree::*/FileTree(BMessage* archive);
+		FileTree();
+		FileTree(BMessage* archive);
 		FileTree(BString pPath, bool pFile, int64 *pintSize, bool pQuery);
 		~FileTree();
 		
-		BArchivable* Instantiate(BMessage* archive);
+		static BArchivable* Instantiate(BMessage* archive);
 		virtual status_t Archive(BMessage* archive, bool deep = true) const;
 		
 		void AddNode(BString Parent, BString Path, bool File, int64 *intSize, bool Query);

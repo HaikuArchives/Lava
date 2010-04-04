@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Team MAUI All rights reserved.
+ * Copyright 2010 Team MAUI All rights reserved.
  * Distributed under the terms of the MIT License.
  *
  * Authors:
@@ -19,9 +19,12 @@ FileTree::FileTree(BMessage* archive)
 : Nodes(new BList()), intSize(new int64(0))
 {
 	BMessage objMessage;
-	if(archive->FindMessage("Nodes", &objMessage) == B_OK) {
+	int32 nodeIndex = 0;
+	while(archive->FindMessage("Nodes", nodeIndex, &objMessage) == B_OK) {
 		FileTree *tmp = cast_as(Instantiate(&objMessage), FileTree);
 		Nodes->AddItem(tmp);
+		
+		nodeIndex++;
 	}
 	
 	archive->FindBool("File", File);
@@ -178,8 +181,9 @@ FileTree::AddNode(BString Parent, BString Path, bool File, int64 *intSize, bool 
 BArchivable*
 FileTree::Instantiate(BMessage* archive)
 {
-	if(validate_instantiation(archive, "FileTree")) 
-		return new FileTree(archive); 
+	if(validate_instantiation(archive, "FileTree")) {
+		return new FileTree(archive);
+	}
 	
 	return NULL; 
 }
