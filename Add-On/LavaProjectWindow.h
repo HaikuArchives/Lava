@@ -24,7 +24,7 @@
 #include "column/ColumnListView.h"
 #include "LavaProject.h"
 #include "ProjectTypeSelector.h"
-#include "../BurnDevice/BurnDevice.h"
+#include "../LibBurnDevice/BurnDevice.h"
 
 class ProjectWindow: public BWindow {
 	public:
