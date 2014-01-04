@@ -7,14 +7,14 @@
 ## Application Specific Settings ---------------------------------------------
 
 # specify the name of the binary
-NAME= libburndevice.so
+NAME= libburndevice
 
 # specify the type of binary
 #	APP:	Application
 #	SHARED:	Shared library or add-on
 #	STATIC:	Static library archive
 #	DRIVER: Kernel Driver
-TYPE= STATIC
+TYPE= SHARED
 
 #	add support for new Pe and Eddie features
 #	to fill in generic makefile
