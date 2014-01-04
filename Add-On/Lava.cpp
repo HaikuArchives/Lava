@@ -239,7 +239,7 @@ process_refs(entry_ref dir_ref, BMessage *msg, void *)
 int
 main(int argc, char * argv[])
 {
-	App::App app;
+	App app;
 	app.Run();
 	
 	return 0;
