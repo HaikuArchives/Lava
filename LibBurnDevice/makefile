@@ -7,14 +7,14 @@
 ## Application Specific Settings ---------------------------------------------
 
 # specify the name of the binary
-NAME= libburndevice.so
+NAME= libburndevice
 
 # specify the type of binary
 #	APP:	Application
 #	SHARED:	Shared library or add-on
 #	STATIC:	Static library archive
 #	DRIVER: Kernel Driver
-TYPE= STATIC
+TYPE= SHARED
 
 #	add support for new Pe and Eddie features
 #	to fill in generic makefile
@@ -57,10 +57,7 @@ RSRCS=
 #		naming scheme you need to specify the path to the library
 #		and it's name
 #		library: my_lib.a entry: my_lib.a or path/my_lib.a
-#gcc2
-#LIBS= be
-#gcc4
-LIBS= be stdc++ supc++
+LIBS= be $(STDCPPLIBS)
 
 
 #	specify additional paths to directories following the standard
