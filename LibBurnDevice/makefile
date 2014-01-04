@@ -57,10 +57,7 @@ RSRCS=
 #		naming scheme you need to specify the path to the library
 #		and it's name
 #		library: my_lib.a entry: my_lib.a or path/my_lib.a
-#gcc2
-#LIBS= be
-#gcc4
-LIBS= be stdc++ supc++
+LIBS= be $(STDCPPLIBS)
 
 
 #	specify additional paths to directories following the standard
