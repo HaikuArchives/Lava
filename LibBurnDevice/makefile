@@ -14,7 +14,8 @@ NAME= libburndevice
 #	SHARED:	Shared library or add-on
 #	STATIC:	Static library archive
 #	DRIVER: Kernel Driver
-TYPE= SHARED
+# TYPE should be specified at the command line
+#TYPE= STATIC
 
 #	add support for new Pe and Eddie features
 #	to fill in generic makefile
