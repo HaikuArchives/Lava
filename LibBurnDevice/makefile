@@ -7,14 +7,15 @@
 ## Application Specific Settings ---------------------------------------------
 
 # specify the name of the binary
-NAME= libburnDevice
+NAME= libburndevice
 
 # specify the type of binary
 #	APP:	Application
 #	SHARED:	Shared library or add-on
 #	STATIC:	Static library archive
 #	DRIVER: Kernel Driver
-TYPE= STATIC
+# TYPE should be specified at the command line
+#TYPE= STATIC
 
 #	add support for new Pe and Eddie features
 #	to fill in generic makefile
