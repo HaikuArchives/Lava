@@ -1,2 +1,3 @@
-objects
+objects-shared
+objects-static
 objects.*-*
