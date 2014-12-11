@@ -1,2 +1,0 @@
-!!! compile the BurnDevice at first, then can compile the test Application !!!
-!!! Into the Folder  "test" is a simlink from the libburndevice.so !!!
