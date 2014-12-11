@@ -18,10 +18,11 @@
 #include <MenuField.h>
 #include <ClassInfo.h>
 
+#include <ColumnTypes.h>
+#include <ColumnListView.h>
+
 #include "FileAccess.h"
 #include "Logging.h"
-#include "column/ColumnTypes.h"
-#include "column/ColumnListView.h"
 #include "LavaProject.h"
 #include "ProjectTypeSelector.h"
 #include "../LibBurnDevice/BurnDevice.h"
